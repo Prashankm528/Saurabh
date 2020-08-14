@@ -1,0 +1,65 @@
+https://guides.github.com/introduction/git-handbook/
+Install Git:
+
+1. Install Git from https://git-scm.com/downloads.
+
+2. Confirm the CLI is properly installed by running the following command. : git --version
+
+
+Configure Your Git Identity:
+
+1. Set your name to associate as the author of future Git commits. This should be your first and/or last name.
+
+	git config --global user.name "Your Name"
+	
+2. Set your email address to associate as the author of future Git commits. This should be the email address you use with GitHub.
+
+	git config --global user.email "you@email.com"
+	
+Create a Local Git Repository:
+
+1. initialize a local Git repository
+
+	git init
+	
+2. check .gitignore  save the below contents into the file.
+	
+	.sfdx
+	.vscode
+	.DS_Store
+	
+Commit Your Files to Git :
+
+1. git add .
+
+2. git commit --message "Initial commit of DreamHouse metadata"
+
+Push Your Files to GitHub:
+
+1. Link your local Git repository with your remote GitHub repository. Make sure to replace YOUR_GITHUB_USERNAME with your actual GitHub username.
+
+	git remote add origin https://github.com/YOUR_GITHUB_USERNAME/sfdx-project.git
+	
+2. Push local commits (your file revisions) to the master branch on GitHub.
+	
+	git push origin master
+	
+
+create a feature branch locally in VS code:
+
+1. git checkout -b faeture/COES-3633
+
+whenn changes aare made:
+
+1. Add all modified files in the project to be tracked by Git
+   git add 
+   
+2. Commit the added files as a snapshot to the project’s version history.
+   git commit --message "Added map component to property page"
+   
+3. git push -u origin "feature branch name " i.e  git push -u origin faeture/COES-3633 //create a feature branch in git
+
+ create a pull request and Merge
+ 
+ 
+ 
