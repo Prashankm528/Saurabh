@@ -1,0 +1,144 @@
+import { LightningElement, api } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+let globalmySet = new Set();
+export default class AITM_PackageCustomerTile extends NavigationMixin(LightningElement) {
+    @api locationLineItems ;
+    selectedid =[]; // multiple selected
+    removeId = [];
+    selecteIdIndividual=[]; // Individual select
+    
+    
+    openLineItemRecord(event){
+        event.preventDefault();
+        let LineItemId = event.target.dataset.id;
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: LineItemId ,
+                objectApiName: 'AITM_Tender_Location_Line_Item__c',
+                actionName: 'view'
+            },
+        });
+
+    }
+    selectcheckbox(event){
+        
+        
+        
+        let targetId = event.target.dataset.targetId;//key
+        console.log('Selected Checkbox' + targetId);
+        let target = this.template.querySelectorAll(`[data-id="${targetId}"]`);
+        if(event.target.checked){
+        let targetId = event.target.dataset.targetId;
+        console.log('Selected Checkbox' + targetId);
+        
+
+            for( let i=0; i<target.length; i++) {
+                target[i].checked = event.target.checked;
+                this.selectedid.push(target[i].dataset.targetId);
+                console.log('Filled list is' + this.selectedid);
+                
+            }
+                    
+        }
+        else{
+            console.log('else');
+            for( let i=0; i<target.length; i++) {
+                target[i].checked = false;
+                this.removeId.push(target[i].dataset.targetId);
+                console.log('Fillremoveed list is' + this.removeId);  
+            }
+            for(let i=0; i< this.removeId.length; i++){
+                let index = this.selectedid.indexOf(this.removeId[i]);
+                if (index > -1) {
+                this.selectedid.splice(index, 1);
+              }
+            }
+            console.log('selected list value are' + this.selectedid);
+            
+           
+        }
+        
+    }
+
+    handleclickCheckBox(event){ 
+        
+        if(event.target.checked){
+            let individualTargetId = event.target.dataset.id; 
+            let individualRecordId = event.target.dataset.targetId;
+            
+            if(this.selectedid.length>0){
+                let checkboxes = this.template.querySelectorAll(`[data-id="${individualTargetId}"]`); 
+                for( let i=0; i<checkboxes.length; i++) { 
+                if(checkboxes[i].checked === true){
+                    let checkboxes1 = this.template.querySelector(`[data-target-id="${individualTargetId}"]`);//key
+                    checkboxes1.checked = true;
+                    }
+                else{
+                    let checkboxes1 = this.template.querySelector(`[data-target-id="${individualTargetId}"]`);
+                    checkboxes1.checked = false ;
+                    }
+                }
+                this.selectedid.push(individualRecordId);
+                
+                console.log( 'individual list value is'+ individualRecordId);
+                console.log('total list value'+ this.selectedid);
+        
+
+        
+            }
+
+            else{
+               
+                this.selecteIdIndividual.push(individualRecordId);
+                console.log('individual record Id' +individualRecordId);
+                console.log('individual list' +this.selecteIdIndividual);
+                
+                
+             }
+        }
+
+
+            else{
+                let individualTargetId = event.target.dataset.id; 
+                let checkboxes1 = this.template.querySelector(`[data-target-id="${individualTargetId}"]`);
+                checkboxes1.checked = false ;
+                let individualRecordId = event.target.dataset.targetId;
+                globalmySet.delete(individualRecordId);
+                if(this.selectedid.length>0){
+                    let index = this.selectedid.indexOf(individualRecordId);
+                    if (index > -1) {
+                        this.selectedid.splice(index, 1);
+                    }
+                    console.log('value removed' +this.selectedValue1)
+                    console.log('lisat after value removed'+JSON.stringify(this.selectedid));
+                }
+                else{
+                    let index = this.selecteIdIndividual.indexOf(individualRecordId);
+                    if (index > -1) {
+                        this.selecteIdIndividual.splice(index, 1);
+                      }
+                      console.log('value removed' +individualRecordId)
+                      console.log('Individual List after value removed'+JSON.stringify(this.selecteIdIndividual));
+                    
+                  }
+                 
+            }
+    }
+    @api
+    deleteCustomerLocation(){
+        let mySet = new Set();
+        for(let i=0; i< this.selectedid.length; i++){
+            mySet.add(this.selectedid[i]);
+        }
+        for(let i=0; i< this.selecteIdIndividual.length; i++){
+            mySet.add(this.selecteIdIndividual[i]);
+        }
+      
+         for (var item of mySet.values()){
+                    var val= val + item + ' '; 
+                     console.log('total delete  value in set are'+ val);
+                }
+               
+    }
+}
