@@ -1,0 +1,133 @@
+import { LightningElement, api } from 'lwc';
+
+export default class AITM_PackageLocation extends LightningElement {
+
+    @api locationItems;
+    @api package;
+    selectedValue1 =  [];
+    selectedValue =  [];
+    selectedItem = '';
+    checkbox = false;
+   
+
+    get options() {
+        return [
+            { label: 'All Locations', value: '' },
+            { label: 'Customers', value: 'Customers' },
+            { label: 'Finished', value: 'finished' },
+        ];
+    }
+
+
+    @api
+    locationEnabled(){
+        this.template.querySelector(".disabledbutton").classList.remove('disabledbutton');
+    }
+
+    handleCustomer(){
+       // this.dispatchEvent(new CustomEvent('next'))
+        if(this.selectedValue1.length>0){
+            alert('Prashank');
+            let valSelected =this.selectedValue1;
+            console.log(valSelected);
+            this.dispatchEvent(new CustomEvent('next', {detail:valSelected}));
+        }
+        else{
+            alert('Mohit');
+            let valSelected =this.selectedValue;
+            console.log(valSelected);
+            this.dispatchEvent(new CustomEvent('next', {detail:valSelected}))
+        }
+       
+        
+        
+   }
+
+   selectAllCheckbox(event){
+       
+        if(event.target.checked){
+            alert('inside check');
+            let checkboxes = this.template.querySelectorAll('[data-id="checkboxAll"]');
+            for( let i=0; i<checkboxes.length; i++) {
+               checkboxes[i].checked = event.target.checked;
+            }
+           // this.checkbox= true;
+            console.log(JSON.stringify(this.locationItems));
+            for(let i=0;i<this.locationItems.length; i++){
+                this.selectedValue1.push(this.locationItems[i].Id);
+            }
+            console.log(this.selectedValue1);
+            console.log(JSON.stringify(this.selectedValue1));
+        }
+        else{
+            let checkboxes = this.template.querySelectorAll('[data-id="checkboxAll"]');
+            for( let i=0; i<checkboxes.length; i++) {
+               checkboxes[i].checked = false;
+            }
+            this.selectedValue1= [];
+        }
+    }
+
+    
+ 
+    handleItemClicked(event) {
+     if(event.target.checked){
+         this.selectedItem = event.target.dataset.recordId;
+        
+         if(this.selectedValue1.length>0){
+
+            let checkboxes = this.template.querySelectorAll('[data-id="checkboxAll"]');
+            for( let i=0; i<checkboxes.length; i++) {
+               if(checkboxes[i].checked === event.target.checked){
+                   let checkboxes1 = this.template.querySelector('[data-id="checkbox"]');
+                   checkboxes1.checked = true;
+               }
+               else{
+                let checkboxes1 = this.template.querySelector('[data-id="checkbox"]');
+                checkboxes1.checked = false;
+               }
+            }
+            
+            this.selectedValue1.push(this.selectedItem);
+            console.log(this.selectedItem);
+            console.log(this.selectedValue1);
+         }
+         else{
+            this.selectedValue.push(this.selectedItem);
+            alert(this.selectedItem);
+            alert(this.selectedValue);
+            console.log(this.selectedValue);
+            console.log(this.selectedItem);
+         }
+       
+          
+          
+     
+      }
+      else{
+        let checkboxes = this.template.querySelector('[data-id="checkbox"]');
+        checkboxes.checked = false;
+          this.selectedItem = event.target.dataset.recordId;
+         // this.allCheckbox = false;
+          alert(this.selectedItem);
+          if(this.selectedValue1.length>0){
+            
+            let index = this.selectedValue1.indexOf(this.selectedItem);
+            if (index > -1) {
+                this.selectedValue1.splice(index, 1);
+              }
+            //this.selectedValue1.pop(this.selectedItem);
+            console.log('value removed' +this.selectedValue1)
+            console.log(JSON.stringify(this.selectedValue1));
+          }
+          else{
+
+            let index = this.selectedValue.indexOf(this.selectedItem);
+            if (index > -1) {
+                this.selectedValue.splice(index, 1);
+              }
+            
+          }
+      }
+    }
+}
